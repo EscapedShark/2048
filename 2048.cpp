@@ -8,6 +8,7 @@
 using namespace std;
 
 // 用于 Mac/Linux 的键盘输入函数
+// use it to replace the _getch() function in Windows
 char getch() {
     char buf = 0;
     struct termios old = {0};
@@ -29,6 +30,7 @@ char getch() {
 }
 
 // 清屏函数（跨平台）
+// clear screen function (cross-platform)
 void clearScreen() {
     cout << "\033[2J\033[1;1H";  // ANSI escape codes for clearing screen
 }
@@ -39,6 +41,7 @@ private:
     int score;
 
     // 初始化游戏板
+    // initialize the game board
     void initBoard() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -51,6 +54,7 @@ private:
     }
 
     // 在空位置随机添加新数字（2或4）
+    // add a new number (2 or 4) to a random empty cell
     void addNewNumber() {
         int emptyCells = 0;
         for (int i = 0; i < 4; i++) {
@@ -62,7 +66,7 @@ private:
         if (emptyCells == 0) return;
 
         int position = rand() % emptyCells;
-        int value = (rand() % 2 + 1) * 2; // 生成2或4
+        int value = (rand() % 2 + 1) * 2; // 生成2或4 (2 or 4)
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -78,11 +82,12 @@ private:
     }
 
     // 移动并合并数字
+    // move and merge numbers
     bool moveAndMerge(int direction) {
         bool moved = false;
         
         switch(direction) {
-            case 0: // 上
+            case 0: // 上 up
                 for (int j = 0; j < 4; j++) {
                     for (int i = 1; i < 4; i++) {
                         if (board[i][j] != 0) {
@@ -107,7 +112,7 @@ private:
                 }
                 break;
 
-            case 1: // 下
+            case 1: // 下 down
                 for (int j = 0; j < 4; j++) {
                     for (int i = 2; i >= 0; i--) {
                         if (board[i][j] != 0) {
@@ -132,7 +137,7 @@ private:
                 }
                 break;
 
-            case 2: // 左
+            case 2: // 左 left
                 for (int i = 0; i < 4; i++) {
                     for (int j = 1; j < 4; j++) {
                         if (board[i][j] != 0) {
@@ -157,7 +162,7 @@ private:
                 }
                 break;
 
-            case 3: // 右
+            case 3: // 右 right
                 for (int i = 0; i < 4; i++) {
                     for (int j = 2; j >= 0; j--) {
                         if (board[i][j] != 0) {
@@ -186,8 +191,10 @@ private:
     }
 
     // 检查游戏是否结束
+    // check if the game is over
     bool isGameOver() {
         // 检查是否有空格
+        // check if there is any empty cell
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (board[i][j] == 0) return false;
@@ -195,6 +202,7 @@ private:
         }
         
         // 检查是否可以合并
+        // check if there is any possible merge
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == board[i][j+1]) return false;
@@ -216,6 +224,7 @@ public:
     }
 
     // 显示游戏面板
+    // display the game board
     void displayBoard() {
         clearScreen();
         cout << "Score: " << score << endl << endl;
@@ -229,10 +238,11 @@ public:
             }
             cout << endl << endl;
         }
-        cout << "使用 W/S/A/D 控制方向，Q退出" << endl;
+        cout << "Use W/S/A/D to control direction, Q to quit" << endl;
     }
 
     // 处理用户输入
+    // process user input
     bool processInput() {
         char input = getch();
         bool moved = false;
@@ -249,7 +259,7 @@ public:
             addNewNumber();
             if (isGameOver()) {
                 displayBoard();
-                cout << "游戏结束！最终得分: " << score << endl;
+                cout << "Game Over! Final Score: " << score << endl;
                 return false;
             }
         }
