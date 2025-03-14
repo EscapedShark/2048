@@ -2,11 +2,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
-#include <termios.h>
-#include <unistd.h>
 
 using namespace std;
 
+#ifndef _WIN32
+#include <termios.h>
+#include <unistd.h>
 // 用于 Mac/Linux 的键盘输入函数
 // use it to replace the _getch() function in Windows
 char getch() {
@@ -28,6 +29,9 @@ char getch() {
         perror("tcsetattr ~ICANON");
     return buf;
 }
+#else
+#include <conio.h>
+#endif
 
 // 清屏函数（跨平台）
 // clear screen function (cross-platform)
